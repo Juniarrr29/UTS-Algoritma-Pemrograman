@@ -1,0 +1,12 @@
+=== ARSIP DATA TUGAS FARDAN (TASKKU) ===
+
+Nama Tugas  : Pointer
+Mata Kuliah : Dasar Pemrograman
+Deadline    : Rabu
+Status      : SELESAI (DONE)
+-------------------------------------
+Nama Tugas  : Limit
+Mata Kuliah : Kalkulus I
+Deadline    : Kamis
+Status      : SELESAI (DONE)
+-------------------------------------
