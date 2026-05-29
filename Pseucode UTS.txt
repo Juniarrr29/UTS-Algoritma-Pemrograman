@@ -1,14 +1,12 @@
-ALGORITMA: Manajemen_Tugas_Taskku
+ALGORITMA: Manajemen_Tugas
 
 DEKLARASI:
-    // Mendefinisikan Struktur Data Tugas
+
     Struktur Tugas:
         namaTugas  : Array [0..49] of Karakter
         mataKuliah : Array [0..49] of Karakter
         deadline   : Array [0..19] of Karakter
         isDone     : Boolean
-    
-    // Mendefinisikan Komponen Class AplikasiTaskku
     Class AplikasiTaskku:
         Private:
             correctUsername : Array [0..29] of Karakter
@@ -28,14 +26,12 @@ DEKLARASI:
             Prosedur hapusTugas()
             Prosedur simpanKeFile()
 
-    // Variabel Utama Program
+
     taskku   : AplikasiTaskku
     pilihan  : Integer
     isLogged : Boolean
 
 DESKRIPSI:
-    // IMPLEMENTASI METHOD & FUNGSI DI DALAM CLASS
-    
     Fungsi cekSama(input, asli):
         i <- 0
         WHILE (input[i] != '\0' OR asli[i] != '\0') DO
@@ -153,7 +149,7 @@ DESKRIPSI:
         ENDIF
 
 
-    // --- ALUR JALAN UTAMA PROGRAM (MAIN.CPP) ---
+    
     Panggil taskku.inisialisasi()
     
     isLogged <- Panggil taskku.login()
