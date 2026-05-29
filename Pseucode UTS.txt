@@ -1,0 +1,185 @@
+ALGORITMA: Manajemen_Tugas_Taskku
+
+DEKLARASI:
+    // Mendefinisikan Struktur Data Tugas
+    Struktur Tugas:
+        namaTugas  : Array [0..49] of Karakter
+        mataKuliah : Array [0..49] of Karakter
+        deadline   : Array [0..19] of Karakter
+        isDone     : Boolean
+    
+    // Mendefinisikan Komponen Class AplikasiTaskku
+    Class AplikasiTaskku:
+        Private:
+            correctUsername : Array [0..29] of Karakter
+            correctPassword : Array [0..19] of Karakter
+            daftarTugas     : Array [0..99] of Tugas
+            jumlahTugas     : Integer
+            batas           : Integer
+        
+        Public:
+            Fungsi cekSama(input : Array of Karakter, asli : Array of Karakter) -> Boolean
+            Prosedur inisialisasi()
+            Fungsi login() -> Boolean
+            Prosedur tambahTugas()
+            Prosedur lihatTugasAktif()
+            Prosedur tandaiSelesai()
+            Prosedur lihatRiwayatSelesai()
+            Prosedur hapusTugas()
+            Prosedur simpanKeFile()
+
+    // Variabel Utama Program
+    taskku   : AplikasiTaskku
+    pilihan  : Integer
+    isLogged : Boolean
+
+DESKRIPSI:
+    // IMPLEMENTASI METHOD & FUNGSI DI DALAM CLASS
+    
+    Fungsi cekSama(input, asli):
+        i <- 0
+        WHILE (input[i] != '\0' OR asli[i] != '\0') DO
+            IF (input[i] != asli[i]) THEN
+                RETURN False
+            ENDIF
+            i <- i + 1
+        ENDWHILE
+        RETURN True
+
+    Prosedur inisialisasi():
+        jumlahTugas <- 0
+        batas <- 3
+        correctUsername <- "Fardan Arib Juniar"
+        correctPassword <- "2500018136"
+
+    Fungsi login():
+        percobaan <- 0
+        WHILE (percobaan < batas) DO
+            Output "Masukkan Username (Nama) : "
+            Input username
+            Output "Masukkan Password (NIM)  : "
+            Input password
+            
+            IF (cekSama(username, correctUsername) AND cekSama(password, correctPassword)) THEN
+                Output "LOGIN BERHASIL!"
+                RETURN True
+            ELSE
+                percobaan <- percobaan + 1
+                Output "Username atau Password salah!"
+                IF (percobaan < batas) THEN
+                    Output "Sisa percobaan: ", (batas - percobaan)
+                ENDIF
+            ENDIF
+        ENDWHILE
+        Output "LOGIN GAGAL! Akun terkunci."
+        RETURN False
+
+    Prosedur tambahTugas():
+        IF (jumlahTugas >= 100) THEN
+            Output "Daftar tugas penuh!"
+            Exit Prosedur
+        ENDIF
+        Output "Nama Tugas  : "
+        Input daftarTugas[jumlahTugas].namaTugas
+        Output "Mata Kuliah : "
+        Input daftarTugas[jumlahTugas].mataKuliah
+        Output "Deadline    : "
+        Input daftarTugas[jumlahTugas].deadline
+        daftarTugas[jumlahTugas].isDone <- False
+        jumlahTugas <- jumlahTugas + 1
+        Output "Tugas berhasil ditambahkan!"
+
+    Prosedur lihatTugasAktif():
+        ditemukan <- False
+        For i <- 0 To (jumlahTugas - 1) Do
+            IF (daftarTugas[i].isDone == False) THEN
+                Output "ID: ", i, " | Tugas: ", daftarTugas[i].namaTugas, " | MK: ", daftarTugas[i].mataKuliah, " | Deadline: ", daftarTugas[i].deadline
+                ditemukan <- True
+            ENDIF
+        EndFor
+        IF (ditemukan == False) THEN
+            Output "Tidak ada tugas aktif."
+        ENDIF
+
+    Prosedur tandaiSelesai():
+        Panggil lihatTugasAktif()
+        Output "Masukkan ID Tugas Selesai: "
+        Input id
+        IF (id >= 0 AND id < jumlahTugas AND daftarTugas[id].isDone == False) THEN
+            daftarTugas[id].isDone <- True
+            Output "Tugas selesai!"
+        ELSE
+            Output "ID Tidak Valid."
+        ENDIF
+
+    Prosedur lihatRiwayatSelesai():
+        ditemukan <- False
+        For i <- 0 To (jumlahTugas - 1) Do
+            IF (daftarTugas[i].isDone == True) THEN
+                Output "Tugas: ", daftarTugas[i].namaTugas, " | Status: DONE"
+                ditemukan <- True
+            ENDIF
+        EndFor
+        IF (ditemukan == False) THEN
+            Output "Belum ada riwayat."
+        ENDIF
+
+    Prosedur hapusTugas():
+        Output "Masukkan ID Tugas yang ingin dihapus: "
+        Input id
+        IF (id >= 0 AND id < jumlahTugas) THEN
+            For j <- id To (jumlahTugas - 2) Do
+                daftarTugas[j] <- daftarTugas[j + 1]
+            EndFor
+            jumlahTugas <- jumlahTugas - 1
+            Output "Tugas terhapus."
+        ELSE
+            Output "ID tidak ditemukan."
+        ENDIF
+
+    Prosedur simpanKeFile():
+        Buka_File "arsip_tugas.txt" dengan Mode Menulis
+        IF (File berhasil dibuat) THEN
+            Tulis_File "=== ARSIP DATA TUGAS FARDAN ==="
+            For i <- 0 To (jumlahTugas - 1) Do
+                Tulis_File "Tugas: ", daftarTugas[i].namaTugas
+                Tulis_File "MK:    ", daftarTugas[i].mataKuliah
+                Tulis_File "Status: ", daftarTugas[i].isDone
+            EndFor
+            Tutup_File
+            Output "Data berhasil disimpan ke file txt!"
+        ELSE
+            Output "Gagal membuat file."
+        ENDIF
+
+
+    // --- ALUR JALAN UTAMA PROGRAM (MAIN.CPP) ---
+    Panggil taskku.inisialisasi()
+    
+    isLogged <- Panggil taskku.login()
+    IF (isLogged == False) THEN
+        Hentikan Program
+    ENDIF
+
+    REPEAT
+        Output "1. Tambah Tugas"
+        Output "2. Lihat Tugas Aktif"
+        Output "3. Tandai Selesai"
+        Output "4. Lihat Riwayat Selesai"
+        Output "5. Hapus Tugas"
+        Output "6. Simpan ke File"
+        Output "7. Keluar"
+        Output "Pilih Menu: "
+        Input pilihan
+
+        IF (pilihan == 1) THEN Panggil taskku.tambahTugas()
+        ELSEIF (pilihan == 2) THEN Panggil taskku.lihatTugasAktif()
+        ELSEIF (pilihan == 3) THEN Panggil taskku.tandaiSelesai()
+        ELSEIF (pilihan == 4) THEN Panggil taskku.lihatRiwayatSelesai()
+        ELSEIF (pilihan == 5) THEN Panggil taskku.hapusTugas()
+        ELSEIF (pilihan == 6) THEN Panggil taskku.simpanKeFile()
+        ELSEIF (pilihan == 7) THEN Output "Keluar Aplikasi. Terima kasih, Fardan."
+        ELSE Output "Pilihan salah!"
+        ENDIF
+
+    UNTIL (pilihan == 7)
